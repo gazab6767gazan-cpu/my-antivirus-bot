@@ -12,12 +12,12 @@ VT_API_KEY = 'ТВОЙ_КЛЮЧ_VIRUSTOTAL'
 
 # Словарь опасных строк, которые мы ищем внутри файлов
 MALICIOUS_STRINGS = {
-    b'com.template.shellapp': '⚠️ Найдена пустая оболочка (ShellApp). Это не игра, а шаблон для показа фишинга.',
-    b'BlockVpnService': '🚨 Найден BlockVpnService! Вирус пытается отключить Google Play Protect (создает локальный VPN).',
-    b'payload.db': '🚨 Найдена база payload.db! Используется для кражи кэша Telegram и ваших данных.',
-    b'QUERY_ALL_PACKAGES': '⚠️ Запрос доступа ко всем приложениям. Вирус ищет банковские приложения.',
-    b'REQUEST_INSTALL_PACKAGES': '🚨 Разрешение на установку других приложений. Вирус может скачать еще больше малвари.',
-    b'BootReceiver': '🚨 Автозагрузка! Вирус запустится снова после перезагрузки телефона.'
+    b'com.template.shellapp': 'Найдена пустая оболочка (ShellApp). Это не игра, а шаблон для показа фишинга.',
+    b'BlockVpnService': 'Найден BlockVpnService! Вирус пытается отключить Google Play Protect (создает локальный VPN).',
+    b'payload.db': 'Найдена база payload.db! Используется для кражи кэша Telegram и ваших данных.',
+    b'QUERY_ALL_PACKAGES': 'Запрос доступа ко всем приложениям. Вирус ищет банковские приложения.',
+    b'REQUEST_INSTALL_PACKAGES': 'Разрешение на установку других приложений. Вирус может скачать еще больше малвари.',
+    b'BootReceiver': 'Автозагрузка! Вирус запустится снова после перезагрузки телефона.'
 }
 
 html_page = """
@@ -25,7 +25,7 @@ html_page = """
 <html>
 <head><title>Ультра-Антивирус</title></head>
 <body style="font-family: Arial; text-align: center; padding: 50px; background: #1a1a1a; color: white;">
-    <h1>🛡 Мой Ультра-Антивирус</h1>
+    <h1> Мой Ультра-Антивирус</h1>
     <p>Загрузите подозрительный APK или ZIP файл для анализа</p>
     <form action="/scan" enctype="multipart/form-data" method="post">
         <input name="file" type="file" style="padding: 10px; background: #333; color: white; border: 1px solid #555; margin-bottom: 20px;"><br>
@@ -58,9 +58,9 @@ async def scan_file(file: UploadFile = File(...)):
         bad = stats.get('malicious', 0) + stats.get('suspicious', 0)
         
         if bad > 0:
-            vt_report = f"<h3 style='color:red;'>🚨 VirusTotal: Файл опасен! Обнаружено {bad} детектов.</h3>"
+            vt_report = f"<h3 style='color:red;'> VirusTotal: Файл опасен! Обнаружено {bad} детектов.</h3>"
         else:
-            vt_report = "<h3 style='color:green;'>✅ VirusTotal: Файл чист.</h3>"
+            vt_report = "<h3 style='color:green;'> VirusTotal: Файл чист.</h3>"
 
     # 2. СТАТИЧЕСКИЙ АНАЛИЗ (Ищем строки внутри APK/ZIP)
     found_threats = []
@@ -78,9 +78,9 @@ async def scan_file(file: UploadFile = File(...)):
                             if bad_str in file_data:
                                 found_threats.append(description)
         except Exception as e:
-            found_threats.append(f"⚠️ Не удалось распаковать архив: {e}")
+            found_threats.append(f" Не удалось распаковать архив: {e}")
     else:
-        found_threats.append("⚠️ Это не APK/ZIP. Глубокий анализ кода не проведен (только проверка хэша).")
+        found_threats.append(" Это не APK/ZIP. Глубокий анализ кода не проведен (только проверка хэша).")
 
     # Убираем дубликаты из списка найденных угроз
     found_threats = list(set(found_threats))
